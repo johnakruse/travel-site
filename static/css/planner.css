@@ -1,10 +1,11 @@
 .planview {
     display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
         "menu   menu    menu    menu    menu"
         "trip   map     map     map     day"
         "trip   map     map     map     day"
-        "trip   .       .       .       day";
+        "trip   map     map     map     day";
 }
 
 .trip {
@@ -52,6 +53,14 @@
 
 .menu li:hover {
     background-color: #053177;
+}
+
+.map {
+    grid-area: map;
+}
+
+#mapid {
+    height: 100%;
 }
 /*
 @media only screen and (min-width: 800px) {
