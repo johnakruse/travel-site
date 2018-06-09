@@ -1,10 +1,10 @@
 .planview {
     display: grid;
     grid-template-areas:
-        "menu   menu    menu    menu"
-        "trip   map     map     day"
-        "trip   map     map     day"
-        "trip   .       .       day";
+        "menu   menu    menu    menu    menu"
+        "trip   map     map     map     day"
+        "trip   map     map     map     day"
+        "trip   .       .       .       day";
 }
 
 .trip {
@@ -13,7 +13,8 @@
     padding-right: 10px;
     border-right: 0.25rem solid #0b46a5;
     border-left: 0.15rem solid #0b46a5;
-    background-color: #e6eaf2;
+    background: linear-gradient(#e6eaf2, white);
+    min-height: 500px;
 }
 
 .day {
@@ -21,7 +22,7 @@
     padding-left: 10px;
     padding-right: 10px;
     border-left: 0.15rem solid;
-    background-color: #e6eaf2;
+    background: linear-gradient(#e6eaf2, white);
 }
 
 .menu {
