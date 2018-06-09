@@ -1,0 +1,66 @@
+.planview {
+    display: grid;
+    grid-template-areas:
+        "menu   menu    menu    menu"
+        "trip   map     map     day"
+        "trip   map     map     day"
+        "trip   .       .       day";
+}
+
+.trip {
+    grid-area: trip;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: 0.25rem solid #0b46a5;
+    border-left: 0.15rem solid #0b46a5;
+    background-color: #e6eaf2;
+}
+
+.day {
+    grid-area: day;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: 0.15rem solid;
+    background-color: #e6eaf2;
+}
+
+.menu {
+    grid-area: menu;
+}
+
+.menu > ul {
+    list-style-type: none;
+    background-color: #0b46a5;
+    overflow: hidden;
+    border-radius: 5px 5px 0px 0px;
+    margin-bottom: 0;
+}
+
+.menu li {
+    float: left;
+    text-align: center;
+}
+
+.menu li * {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.menu li:hover {
+    background-color: #053177;
+}
+/*
+@media only screen and (min-width: 800px) {
+.planview {
+    display: grid;
+    grid-template-areas:
+        "menu   menu    menu    menu"
+        "trip   map     map     day"
+        "trip   map     map     day"
+        "trip   .       .       day";
+}
+}
+*/
