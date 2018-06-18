@@ -4,22 +4,19 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/planner.css') }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
   <div class="planview">
     <div class="menu">
       <ul>
         <li class="dropdown"><a href="javascript:void(0)">Manage Plan</a></li>
-        <li><a>+ Add Location</a></li>
+        <li><a id="newday">+ New Day</a></li>
         <li><a>Budget</a></li>
       </ul>
     </div>
     <div class="day">
-      <p>individual days will go here</p>
-      <p>the day will consist of each place to go to, with suggestions of other stuff to do</p>
     </div>
     <div class="trip">
-      <p>the trip outline will go here</p>
-      <p>ideally this will be a box in the end that kind of sticks to the side</p>
     </div>
     <div class="map">
       <div id="mapid"></div>
@@ -33,5 +30,13 @@
       id: 'mapbox.streets',
       accessToken: '***REMOVED***'
   }).addTo(mymap);
+  function onMapClick(e) {
+    L.marker(e.latlng).addTo(mymap);
+    $(".trip ul:last-child").append("<li>" + e.latlng + "</li>");
+  }
+  mymap.on('click', onMapClick);
+  $("#newday").on("click", function() {
+    $(".trip").append("<ul></ul>");
+  });
 </script>
 </html>
