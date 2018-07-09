@@ -34,9 +34,16 @@
     L.marker(e.latlng).addTo(mymap);
     $(".trip ul:last-child").append("<li>" + e.latlng + "</li>");
   }
+  function onMapDrag() {
+    var coordinates = mymap.getBounds();
+    var request = new XMLHttpRequest();
+    request.open("POST", "/query/");
+    var boundsForm = `north=${coordinates.getNorth()}&south=${coordinates.getSouth()}&east=${coordinates.getEast()}&west=${coordinates.getWest()}`
+  }
   mymap.on('click', onMapClick);
   $("#newday").on("click", function() {
     $(".trip").append("<ul></ul>");
   });
+  mymap.on('drageend', onMapDrag)
 </script>
 </html>
