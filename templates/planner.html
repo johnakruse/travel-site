@@ -44,10 +44,12 @@
     FD.append('west', coordinates.getWest());
     FD.append('tourism', "true");
     request.open("POST", "/query/");
-    console.log(FD);
+    request.onreadystatechange = listData;
     request.send(FD);
-    var response = request.responseText;
-    console.log(response);
+    function listData() {
+      var response = request.responseText;
+      console.log(response);
+    }
   }
   mymap.on('click', onMapClick);
   $("#newday").on("click", function() {
