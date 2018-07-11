@@ -4,11 +4,12 @@ from bs4 import BeautifulSoup
 def send_query(query_line):
     payload = {'data': query_line}
     result = requests.get('https://lz4.overpass-api.de/api/interpreter', params=payload)
-    return result
+    return result.content
 
 def build_query(**kwargs):
     #building our box here
-    query = "[out:json];(node({south}, {west}, {north}, {east}))->.box;".format(kwargs)
+    query = "[out:json];(node({south[0]}, {west[0]}, {north[0]}, {east[0]}))->.box;".format(**kwargs)
+    print(query)
     if "tourism" in kwargs:
         query = query + "(node.box[tourism];)->.tourism;"
     if "food" in kwargs:

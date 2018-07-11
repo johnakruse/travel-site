@@ -37,8 +37,17 @@
   function onMapDrag() {
     var coordinates = mymap.getBounds();
     var request = new XMLHttpRequest();
+    var FD = new FormData();
+    FD.append('north', coordinates.getNorth());
+    FD.append('south', coordinates.getSouth());
+    FD.append('east', coordinates.getEast());
+    FD.append('west', coordinates.getWest());
+    FD.append('tourism', "true");
     request.open("POST", "/query/");
-    var boundsForm = `north=${coordinates.getNorth()}&south=${coordinates.getSouth()}&east=${coordinates.getEast()}&west=${coordinates.getWest()}`
+    console.log(FD);
+    request.send(FD);
+    var response = request.responseText;
+    console.log(response);
   }
   mymap.on('click', onMapClick);
   $("#newday").on("click", function() {

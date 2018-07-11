@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+import osm_parser as osm
 app = Flask(__name__)
 
 @app.route("/")
@@ -15,8 +16,7 @@ def newplan():
 def get_plan(plan_id):
     return render_template('planner.html', plan=plan_id)
 
-@app.route("/query/")
+@app.route("/query/", methods=["POST"])
 def make_query():
-    points = query(request.form)
-    #want to pass a list of nodes, essentially a list of dicts
-    return jsonify(points)
+    points = osm.build_query(**request.form)
+    return points
