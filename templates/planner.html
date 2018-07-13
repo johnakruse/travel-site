@@ -47,7 +47,7 @@
       request.open("POST", "/query/");
       request.onload = function() {
         if(request.status == 200) {
-          resolve(request.responseText);
+          resolve(JSON.parse(request.responseText));
         } else {
           reject(Error(request.statusText));
         }
@@ -61,14 +61,15 @@
   function addLayer() {
     getPoints().then(function(locations) {
       var tourism = [];
-      console.log("here");
-      console.log(locations);
-      for (item in locations) {
+      locations.elements.forEach(function(item) {
         if(item.tags.hasOwnProperty('tourism')) {
-          var newplace = L.marker([item.lat, item.lon]).bindPopup('<h3>item.tags.name</h3>');
-          tourism.append(newplace);
+          var newplace = L.marker([item.lat, item.lon]).bindPopup('<h3>' + item.tags.name + '</h3>');
+          tourism.push(newplace);
         }
-      }
+      });
+      console.log("done");
+      var tourist_spots = L.layerGroup(tourism);
+      L.control.layers(null, {tourism: tourist_spots}).addTo(mymap);
     }, function(error) {
       console.error("getting points failed", error);
     })
