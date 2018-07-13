@@ -34,27 +34,49 @@
     L.marker(e.latlng).addTo(mymap);
     $(".trip ul:last-child").append("<li>" + e.latlng + "</li>");
   }
-  function onMapDrag() {
-    var coordinates = mymap.getBounds();
-    var request = new XMLHttpRequest();
-    var FD = new FormData();
-    FD.append('north', coordinates.getNorth());
-    FD.append('south', coordinates.getSouth());
-    FD.append('east', coordinates.getEast());
-    FD.append('west', coordinates.getWest());
-    FD.append('tourism', "true");
-    request.open("POST", "/query/");
-    request.onreadystatechange = listData;
-    request.send(FD);
-    function listData() {
-      var response = request.responseText;
-      console.log(response);
-    }
+  function getPoints() {
+    return new Promise(function(resolve, reject) {
+      var coordinates = mymap.getBounds();
+      var request = new XMLHttpRequest();
+      var FD = new FormData();
+      FD.append('north', coordinates.getNorth());
+      FD.append('south', coordinates.getSouth());
+      FD.append('east', coordinates.getEast());
+      FD.append('west', coordinates.getWest());
+      FD.append('tourism', "true");
+      request.open("POST", "/query/");
+      request.onload = function() {
+        if(request.status == 200) {
+          resolve(request.responseText);
+        } else {
+          reject(Error(request.statusText));
+        }
+      }
+      request.onerror = function() {
+        reject(Error("Network Error"));
+      }
+      request.send(FD);
+    });
+  }
+  function addLayer() {
+    getPoints().then(function(locations) {
+      var tourism = [];
+      console.log("here");
+      console.log(locations);
+      for (item in locations) {
+        if(item.tags.hasOwnProperty('tourism')) {
+          var newplace = L.marker([item.lat, item.lon]).bindPopup('<h3>item.tags.name</h3>');
+          tourism.append(newplace);
+        }
+      }
+    }, function(error) {
+      console.error("getting points failed", error);
+    })
   }
   mymap.on('click', onMapClick);
   $("#newday").on("click", function() {
     $(".trip").append("<ul></ul>");
   });
-  mymap.on('drageend', onMapDrag)
+  mymap.on('moveend', addLayer);
 </script>
 </html>
