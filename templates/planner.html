@@ -30,9 +30,10 @@
       id: 'mapbox.streets',
       accessToken: '***REMOVED***'
   }).addTo(mymap);
-  function onMapClick(e) {
-    L.marker(e.latlng).addTo(mymap);
-    $(".trip ul:last-child").append("<li>" + e.latlng + "</li>");
+  function addDestination(info) {
+    $(".trip ul:last-child").append(
+      "<li>" + info.latlng + "</li>"
+    );
   }
   function getPoints() {
     return new Promise(function(resolve, reject) {
@@ -64,7 +65,12 @@
       var tourism = [];
       locations.elements.forEach(function(item) {
         if(item.tags.hasOwnProperty('tourism')) {
-          var newplace = L.marker([item.lat, item.lon]).bindPopup('<h3>' + item.tags.name + '</h3>');
+          if(item.tags.hasOwnProperty('name')) {
+            var name = '<h3>' + item.tags.name + '</h3>';
+          } else {
+            var name = '<h3>' + item.tags.tourism + '</h3>';
+          }
+          var newplace = L.marker([item.lat, item.lon]).bindPopup(name);
           tourism.push(newplace);
         }
       });
