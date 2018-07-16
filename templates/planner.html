@@ -58,6 +58,7 @@
       request.send(FD);
     });
   }
+  var tourist_spots = L.layerGroup({}).addTo(mymap);
   function addLayer() {
     getPoints().then(function(locations) {
       var tourism = [];
@@ -67,17 +68,18 @@
           tourism.push(newplace);
         }
       });
-      console.log("done");
-      var tourist_spots = L.layerGroup(tourism);
-      L.control.layers(null, {tourism: tourist_spots}).addTo(mymap);
+      if(mymap.hasLayer(tourist_spots)){
+        mymap.removeLayer(tourist_spots);
+      }
+      tourist_spots = L.layerGroup(tourism).addTo(mymap);
     }, function(error) {
       console.error("getting points failed", error);
     })
   }
-  mymap.on('click', onMapClick);
   $("#newday").on("click", function() {
     $(".trip").append("<ul></ul>");
   });
+  mymap.on('load', addLayer);
   mymap.on('moveend', addLayer);
 </script>
 </html>
