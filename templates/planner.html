@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/planner.css') }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
@@ -14,7 +15,13 @@
         <li><a>Budget</a></li>
       </ul>
     </div>
-    <div class="day">
+    <div class="day" id="app">
+      <place-description
+        v-for="place in places"
+        v-bind:key="place.id"
+        v-bind:identifier="place.id"
+        v-bind:title="place.name"
+      ></place-description>
     </div>
     <div class="trip">
     </div>
@@ -63,21 +70,31 @@
   function addLayer() {
     getPoints().then(function(locations) {
       var tourism = [];
+      var placeList = [];
       locations.elements.forEach(function(item) {
         if(item.tags.hasOwnProperty('tourism')) {
           if(item.tags.hasOwnProperty('name')) {
-            var name = '<h3>' + item.tags.name + '</h3>';
+            var place = {
+              "name": item.tags.name,
+              "id": item.id
+            }
           } else {
-            var name = '<h3>' + item.tags.tourism + '</h3>';
+            var place = {
+              "name": item.tags.tourism,
+              "id": item.id
+            }
           }
+          var name = '<h3>' + place.name + '</h3>';
           var newplace = L.marker([item.lat, item.lon]).bindPopup(name);
           tourism.push(newplace);
+          placeList.push(place);
         }
       });
       if(mymap.hasLayer(tourist_spots)){
         mymap.removeLayer(tourist_spots);
       }
       tourist_spots = L.layerGroup(tourism).addTo(mymap);
+      locationList.places = placeList;
     }, function(error) {
       console.error("getting points failed", error);
     })
@@ -87,5 +104,25 @@
   });
   mymap.on('load', addLayer);
   mymap.on('moveend', addLayer);
+
+  Vue.component('place-description', {
+    delimiters: ['~{','}~'],
+    props: ['title', 'identifier'],
+    template: `
+      <div>
+        <h3>~{ title }~</h3>
+        id: ~{ identifier }~
+      </div>
+    `
+  });
+
+  var locationList = new Vue({
+    el: "#app",
+    data: {
+      places: [
+        {id: "2", name: "test"}
+      ]
+    }
+  });
 </script>
 </html>
