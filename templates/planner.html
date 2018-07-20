@@ -12,7 +12,6 @@
       <ul>
         <li class="dropdown"><a href="javascript:void(0)">Manage Plan</a></li>
         <li><a id="newday">+ New Day</a></li>
-        <li><a>Budget</a></li>
       </ul>
     </div>
     <div class="day" id="app">
@@ -23,7 +22,7 @@
         v-bind:title="place.name"
       ></place-description>
     </div>
-    <div class="trip">
+    <div class="trip" id="dayPlan">
     </div>
     <div class="map">
       <div id="mapid"></div>
@@ -100,7 +99,11 @@
     })
   }
   $("#newday").on("click", function() {
-    $(".trip").append("<ul></ul>");
+    var latest = dayPlans.trip.slice(-1)[0].title;
+    dayPlans.trip.push({
+      title: latest + 1,
+      places: []
+    });
   });
   mymap.on('load', addLayer);
   mymap.on('moveend', addLayer);
@@ -109,9 +112,8 @@
     delimiters: ['~{','}~'],
     props: ['title', 'identifier'],
     template: `
-      <div>
+      <div :id=identifier hidden="true">
         <h3>~{ title }~</h3>
-        id: ~{ identifier }~
       </div>
     `
   });
@@ -119,8 +121,19 @@
   var locationList = new Vue({
     el: "#app",
     data: {
-      places: [
-        {id: "2", name: "test"}
+      trip: [],
+      places: []
+    }
+  });
+
+  var dayPlans = new Vue({
+    el: "#dayPlan",
+    data: {
+      trip: [
+        {
+          title: 1,
+          places: []
+        }
       ]
     }
   });
