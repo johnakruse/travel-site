@@ -84,7 +84,10 @@
             }
           }
           var name = '<h3>' + place.name + '</h3>';
-          var newplace = L.marker([item.lat, item.lon]).bindPopup(name);
+          var newplace = L.marker([item.lat, item.lon]).on("click", function() {
+            $("#app").children().hide();
+            $("#" + place.id).show();
+          });
           tourism.push(newplace);
           placeList.push(place);
         }
@@ -112,7 +115,7 @@
     delimiters: ['~{','}~'],
     props: ['title', 'identifier'],
     template: `
-      <div :id=identifier hidden="true">
+      <div :id=identifier>
         <h3>~{ title }~</h3>
       </div>
     `
