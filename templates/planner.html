@@ -24,6 +24,12 @@
       ></place-description>
     </div>
     <div class="trip" id="dayPlan">
+      <trip-destination
+        v-for="place in trip[0].places"
+        v-bind:key="place.id"
+        v-bind:title="place.name"
+        v-bind:info="place.info"
+      ></trip-destination>
     </div>
     <div class="map">
       <div id="mapid"></div>
@@ -130,6 +136,22 @@
           </li>
         </ul>
         <button onclick="addPlace(this)">Add to trip</button>
+      </div>
+    `
+  });
+
+  Vue.component('trip-destination', {
+    delimiters: ['~{','}~'],
+    props: ['title', 'identifier', 'info'],
+    template: `
+      <div>
+        <h3>~{ title }~</h3>
+        <ul>
+          <li v-for="(value, key) in info">
+            <b>~{ key }~</b>: ~{ value }~
+          </li>
+        </ul>
+        <button onclick="removePlace(this)">Remove this place</button>
       </div>
     `
   });
