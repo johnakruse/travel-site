@@ -110,6 +110,14 @@
   mymap.on('load', addLayer);
   mymap.on('moveend', addLayer);
 
+  function addPlace(button) {
+    var id = button.parentNode.getAttribute('id');
+    var place = locationList.places.filter(obj => {
+      return obj.id == id
+    });
+    dayPlans.trip.slice(-1)[0].places.push(place[0]);
+  }
+
   Vue.component('place-description', {
     delimiters: ['~{','}~'],
     props: ['title', 'identifier', 'info'],
@@ -118,9 +126,10 @@
         <h3>~{ title }~</h3>
         <ul>
           <li v-for="(value, key) in info">
-            ~{ key }~: ~{ value }~
+            <b>~{ key }~</b>: ~{ value }~
           </li>
         </ul>
+        <button onclick="addPlace(this)">Add to trip</button>
       </div>
     `
   });
