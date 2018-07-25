@@ -20,6 +20,7 @@
         v-bind:key="place.id"
         v-bind:identifier="place.id"
         v-bind:title="place.name"
+        v-bind:info="place.info"
       ></place-description>
     </div>
     <div class="trip" id="dayPlan">
@@ -72,16 +73,14 @@
       var placeList = [];
       locations.elements.forEach(function(item) {
         if(item.tags.hasOwnProperty('tourism')) {
+          var place = {
+            "info": item.tags,
+            "id": item.id
+          }
           if(item.tags.hasOwnProperty('name')) {
-            var place = {
-              "name": item.tags.name,
-              "id": item.id
-            }
+            place["name"] = item.tags.name;
           } else {
-            var place = {
-              "name": item.tags.tourism,
-              "id": item.id
-            }
+            place["name"] = item.tags.tourism;
           }
           var name = '<h3>' + place.name + '</h3>';
           var newplace = L.marker([item.lat, item.lon]).on("click", function() {
@@ -113,10 +112,15 @@
 
   Vue.component('place-description', {
     delimiters: ['~{','}~'],
-    props: ['title', 'identifier'],
+    props: ['title', 'identifier', 'info'],
     template: `
-      <div :id=identifier>
+      <div :id="identifier">
         <h3>~{ title }~</h3>
+        <ul>
+          <li v-for="(value, key) in info">
+            ~{ key }~: ~{ value }~
+          </li>
+        </ul>
       </div>
     `
   });
